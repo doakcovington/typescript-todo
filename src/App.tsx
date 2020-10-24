@@ -1,18 +1,47 @@
 //NCWH
 //WDGTR
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import { useState } from 'react';
+import { TodoList } from './TodoList';
+import { AddTodoForm } from './AddTodoForm';
+
+const initialTodos: Todo[] = [
+  {
+    text: 'Go to Target',
+    complete: false,
+  },
+  {
+    text: 'Pick Up Moose',
+    complete: false,
+  }
+];
 
 function App() {
+  const [todos, setTodos] = useState(initialTodos);
+
+  const toggleTodo = (selectedTodo: Todo) => {
+    const newTodos = todos.map(todo => {
+      if (todo === selectedTodo) {
+        return {
+          ...todo,
+          complete: !todo.complete,
+        };
+      }
+      return todo;
+    });
+    setTodos(newTodos);
+  }
+
+  const addTodo: AddTodo = (text: string) => {
+    const newTodo = { text, complete: false};
+    setTodos([...todos, newTodo]);
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          We Don't Go To Ravenholm
-        </p>
-      </header>
+      <TodoList todos={todos} toggleTodo={toggleTodo} />
+      <AddTodoForm addTodo={addTodo} />
     </div>
   );
 }
